@@ -36,7 +36,7 @@ class Template_Lite {
 	var $force_compile		= false;	// force a compile regardless of saved state
 	var $template_dir		= "templates";	// where the templates are to be found
 	var $plugin_prefix		= array('tpl'); // prefix for plugins/filters, without underscore
-	var $plugins_dir			= array("plugins");	// where the plugins are to be found
+	var $plugins_dir			= array("plugins","custom");	// where the plugins are to be found
 	var $compile_dir		= "compiled";	// the directory to store the compiled files in
 	var $config_dir			= "templates";	// where the config files are
 	var $cache_dir			= "cached";	// where cache files are stored
@@ -93,7 +93,7 @@ class Template_Lite {
 	var $_sections = array();
 	var $_foreach = array();
 
-	function Template_Lite()
+	function __construct()
 	{
 		$this->_tpl_vars = &$this->_vars;
 		$this->_version_date = strtotime($this->_version_date);
@@ -491,7 +491,7 @@ class Template_Lite {
 
 			if (!$exists)
 			{
-				$this->trigger_error("file '$file' does not exist", E_USER_ERROR);
+				$this->trigger_error("file '$this->_get_dir($this->template_dir$file' does not exist2", E_USER_ERROR);
 			}
 		}
 		else
@@ -502,7 +502,7 @@ class Template_Lite {
 
 			if (!$exists)
 			{
-				$this->trigger_error("file '$file' does not exist", E_USER_ERROR);
+				$this->trigger_error("file '$file' does not exist ", E_USER_ERROR);
 			}
 			$this->_resource_time = $resource_timestamp;
 		}

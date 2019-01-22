@@ -1,5 +1,6 @@
 <?php
 /*
+
  * Project:	template_lite, a smarter template engine
  * File:	class.compiler.php
  * Author:	Paul Lockaby <paul@paullockaby.com>, Mark Dickenson <akapanamajack@sourceforge.net>
@@ -76,7 +77,7 @@ class Template_Lite_Compiler extends Template_Lite {
     var $_obj_call_regexp       =   null;
 	var $_templatelite_vars		=	array();
 
-	function Template_Lite_compiler()
+	function __construct()
 	{
 		// matches double quoted strings:
         // "foobar"
@@ -243,8 +244,14 @@ class Template_Lite_Compiler extends Template_Lite {
 		}
 
 		// remove all comments
-		$file_contents = preg_replace("!{$ldq}\*.*?\*{$rdq}!se","",$file_contents);
-
+		//$file_contents = preg_replace("!{$ldq}\*.*?\*{$rdq}!se","",$file_contents);
+                
+                $callback = function() {};
+                $file_contents = preg_replace_callback("!{$ldq}\*.*?\*{$rdq}!s",$callback,$file_contents);
+                
+                
+                
+                
 		// replace all php start and end tags
 		$file_contents = preg_replace('%(<\?(?!php|=|$))%i', '<?php echo \'\\1\'?>'."\n", $file_contents);
 
@@ -367,7 +374,10 @@ class Template_Lite_Compiler extends Template_Lite {
 				return $this->right_delimiter;
 				break;
 			case 'literal':
-				list (,$literal) = each($this->_literal);
+				//list (,$literal) = each($this->_literal);
+				$literal = current($this->_literal);
+				next($this->_literal);
+				
 				$this->_linenum += substr_count($literal, "\n");
 				return "<?php echo '" . str_replace("'", "\'", str_replace("\\", "\\\\", $literal)) . "'; ?>\n";
 				break;
